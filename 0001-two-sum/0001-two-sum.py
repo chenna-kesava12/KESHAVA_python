@@ -1,13 +1,8 @@
-class Solution(object):
+class Solution:
     def twoSum(self, nums, target):
-        """
-        :type nums: List[int]
-        :type target: int
-        :rtype: List[int]
-        """
-        seen = {}  # Dictionary to store number -> index
+        num_map = {}  # Dictionary to store number and its index
         for i, num in enumerate(nums):
             complement = target - num
-            if complement in seen:
-                return [seen[complement], i]
-            seen[num] = i
+            if complement in num_map:
+                return [num_map[complement], i]
+            num_map[num] = i
