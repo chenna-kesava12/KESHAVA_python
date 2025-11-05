@@ -1,25 +1,14 @@
-class Solution(object):
+class Solution:
     def lengthOfLongestSubstring(self, s):
-        """
-        :type s: str
-        :rtype: int
-        """
-        char_index_map = {}  # Dictionary to store the most recent index of each character
-        start = 0  # Start index of the current window
-        max_len = 0  # Maximum length of substring without repeating characters
+        char_index = {}  # stores last index of each character
+        left = 0  # left boundary of the window
+        max_len = 0
 
-        for end, char in enumerate(s):  # `end` is the right pointer of the window
-            if char in char_index_map and char_index_map[char] >= start:
-                # If the character is already in the window, move the `start` pointer
-                # to the right of the last occurrence of this character
-                start = char_index_map[char] + 1
-
-            # Update the most recent index of the current character
-            char_index_map[char] = end
-
-            # Update the maximum length of the substring
-            max_len = max(max_len, end - start + 1)
+        for right, char in enumerate(s):
+            if char in char_index and char_index[char] >= left:
+                # Move the left pointer to the right of the previous occurrence
+                left = char_index[char] + 1
+            char_index[char] = right
+            max_len = max(max_len, right - left + 1)
 
         return max_len
-
-        
