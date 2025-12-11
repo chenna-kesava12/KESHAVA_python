@@ -1,6 +1,6 @@
 class Solution:
     def romanToInt(self, s):
-        # Mapping Roman numerals to integers
+        # Mapping of Roman numerals to values
         roman_map = {
             'I': 1,
             'V': 5,
@@ -10,11 +10,11 @@ class Solution:
             'D': 500,
             'M': 1000
         }
-
+        
         total = 0
         prev_value = 0
-
-        # Traverse from right to left
+        
+        # Process each character from right to left
         for char in reversed(s):
             value = roman_map[char]
             if value < prev_value:
@@ -23,5 +23,6 @@ class Solution:
             else:
                 total += value
             prev_value = value
-
+        
         return total
+        
