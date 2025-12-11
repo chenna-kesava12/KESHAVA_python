@@ -1,22 +1,28 @@
 class Solution:
     def intToRoman(self, num):
-        # Roman numerals in descending order with special subtractive cases
-        values = [
-            1000, 900, 500, 400,
-            100, 90, 50, 40,
-            10, 9, 5, 4,
-            1
+        # Mapping of values to Roman numerals, including subtractive forms
+        val_to_roman = [
+            (1000, 'M'),
+            (900, 'CM'),
+            (500, 'D'),
+            (400, 'CD'),
+            (100, 'C'),
+            (90, 'XC'),
+            (50, 'L'),
+            (40, 'XL'),
+            (10, 'X'),
+            (9, 'IX'),
+            (5, 'V'),
+            (4, 'IV'),
+            (1, 'I')
         ]
-        symbols = [
-            "M", "CM", "D", "CD",
-            "C", "XC", "L", "XL",
-            "X", "IX", "V", "IV",
-            "I"
-        ]
-
-        roman = ""
-        for i in range(len(values)):
-            while num >= values[i]:
-                roman += symbols[i]
-                num -= values[i]
-        return roman
+        
+        res = ""
+        for value, roman in val_to_roman:
+            # Append as many times as we can subtract
+            while num >= value:
+                res += roman
+                num -= value
+        
+        return res
+        
