@@ -1,29 +1,46 @@
 class Solution:
     def myAtoi(self, s):
-        s = s.lstrip()  # Remove leading whitespaces
-        if not s:
-            return 0
-
-        sign = 1
+        INT_MIN = -2**31          # -2147483648
+        INT_MAX = 2**31 - 1       #  2147483647
+        
         i = 0
-        if s[0] == '-':
+        n = len(s)
+        
+        # 1. Skip leading whitespace
+        while i < n and s[i] == ' ':
+            i += 1
+        
+        # If string ended
+        if i >= n:
+            return 0
+        
+        # 2. Check for sign
+        sign = 1
+        if s[i] == '-':
             sign = -1
             i += 1
-        elif s[0] == '+':
+        elif s[i] == '+':
             i += 1
-
-        num = 0
-        while i < len(s) and s[i].isdigit():
-            num = num * 10 + int(s[i])
+        
+        # 3. Convert digits
+        result = 0
+        found_digit = False
+        
+        while i < n and s[i].isdigit():
+            found_digit = True
+            digit = ord(s[i]) - ord('0')
             i += 1
+            
+            # Check overflow BEFORE adding digit
+            if result > INT_MAX // 10 or (result == INT_MAX // 10 and digit > 7):
+                return INT_MAX if sign == 1 else INT_MIN
+            
+            result = result * 10 + digit
+        
+        if not found_digit:
+            return 0
+        
+        return sign * result
 
-        num *= sign
 
-        # Clamp to 32-bit signed integer range
-        INT_MIN, INT_MAX = -2**31, 2**31 - 1
-        if num < INT_MIN:
-            return INT_MIN
-        if num > INT_MAX:
-            return INT_MAX
-
-        return num
+        
