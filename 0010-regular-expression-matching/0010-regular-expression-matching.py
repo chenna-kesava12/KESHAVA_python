@@ -2,28 +2,22 @@ class Solution:
     def isMatch(self, s, p):
         m, n = len(s), len(p)
 
-        # dp[i][j] = True if s[0..i-1] matches p[0..j-1]
+        # dp[i][j] = whether s[i:] matches p[j:]
         dp = [[False] * (n + 1) for _ in range(m + 1)]
-        dp[0][0] = True  # empty string matches empty pattern
+        dp[m][n] = True  # empty string matches empty pattern
 
-        # Handle patterns like a*, a*b*, a*b*c* that can match empty string
-        for j in range(2, n + 1):
-            if p[j - 1] == '*':
-                dp[0][j] = dp[0][j - 2]
+        # Fill DP table from bottom-right to top-left
+        for i in range(m, -1, -1):
+            for j in range(n - 1, -1, -1):
 
-        for i in range(1, m + 1):
-            for j in range(1, n + 1):
-                if p[j - 1] == s[i - 1] or p[j - 1] == '.':
-                    # Current chars match
-                    dp[i][j] = dp[i - 1][j - 1]
-                elif p[j - 1] == '*':
-                    # Zero occurrence of previous char
-                    dp[i][j] = dp[i][j - 2]
-                    # One or more occurrence if previous char matches current
-                    if p[j - 2] == s[i - 1] or p[j - 2] == '.':
-                        dp[i][j] = dp[i][j] or dp[i - 1][j]
+                first_match = (i < m) and (p[j] == s[i] or p[j] == '.')
 
-        return dp[m][n]
+                # If next char is '*', handle zero or more repetitions
+                if j + 1 < n and p[j + 1] == '*':
+                    dp[i][j] = dp[i][j + 2] or (first_match and dp[i + 1][j])
+                else:
+                    dp[i][j] = first_match and dp[i + 1][j + 1]
 
-
+        return dp[0][0]
+        
         
