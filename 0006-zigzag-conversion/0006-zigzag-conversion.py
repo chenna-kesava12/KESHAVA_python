@@ -1,19 +1,24 @@
 class Solution:
-    def convert(self, s, numRows):
-        if numRows == 1 or numRows >= len(s):
+    def convert(self, s: str, numRows: int) -> str:
+        if numRows == 1:
             return s
-        
-        rows = [""] * numRows
-        curRow = 0
-        goingDown = False
-        
-        for c in s:
-            rows[curRow] += c
-            
-            if curRow == 0 or curRow == numRows - 1:
-                goingDown = not goingDown
-            
-            curRow += 1 if goingDown else -1
-        
-        return "".join(rows)
+
+        mat = [[] for _ in range(numRows)]
+        i = 0
+        n = len(s)
+
+        while i < n:
+            for down in range(numRows):
+                if i < n:
+                    mat[down].append(s[i])
+                    i += 1
+            for up in range(numRows - 2, 0, -1):
+                if i < n:
+                    mat[up].append(s[i])
+                    i += 1
+
+        ans = ""
+        for row in mat:
+            ans += ''.join(row)
+        return ans
         
