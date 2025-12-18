@@ -1,20 +1,34 @@
-class Solution:
+class Solution(object):
     def longestPalindrome(self, s):
-        if not s:
+        """
+        :type s: str
+        :rtype: str
+        """
+        n = len(s)
+        if n == 0:
             return ""
-        start, end = 0, 0
-        for i in range(len(s)):
-            len1 = self._expand(s, i, i)      # odd-length
-            len2 = self._expand(s, i, i + 1)  # even-length
-            long_len = len1 if len1 > len2 else len2
-            if long_len > (end - start):
-                start = i - (long_len - 1) // 2
-                end = i + long_len // 2
-        return s[start:end + 1]
-
-    def _expand(self, s, left, right):
-        while left >= 0 and right < len(s) and s[left] == s[right]:
-            left -= 1
-            right += 1
-        return right - left - 1
+        
+        start = 0
+        max_length = 1
+        
+        dp = [[False] * n for _ in range(n)]
+        
+        for i in range(n):
+            dp[i][i] = True  # Single characters are palindromes
+        
+        for length in range(2, n + 1):
+            for i in range(n - length + 1):
+                j = i + length - 1
+                
+                if s[i] == s[j]:
+                    if length == 2:
+                        dp[i][j] = True
+                    else:
+                        dp[i][j] = dp[i + 1][j - 1]
+                    
+                    if dp[i][j] and length > max_length:
+                        start = i
+                        max_length = length
+        
+        return s[start:start + max_length]
         
